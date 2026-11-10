@@ -1,0 +1,693 @@
+{
+    "variable":  [
+                     {
+                         "key":  "baseUrl",
+                         "value":  "http://127.0.0.1:8000/api"
+                     },
+                     {
+                         "key":  "token",
+                         "value":  ""
+                     },
+                     {
+                         "key":  "postId",
+                         "value":  "1"
+                     },
+                     {
+                         "key":  "commentId",
+                         "value":  "1"
+                     },
+                     {
+                         "key":  "userId",
+                         "value":  "1"
+                     }
+                 ],
+    "info":  {
+                 "name":  "Blog API",
+                 "schema":  "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+             },
+    "item":  [
+                 {
+                     "name":  "Auth",
+                     "item":  [
+                                  {
+                                      "request":  {
+                                                      "body":  {
+                                                                   "raw":  "{\"email\":\"jane@example.com\",\"password_confirmation\":\"password123\",\"name\":\"Jane Doe\",\"password\":\"password123\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               },
+                                                      "method":  "POST",
+                                                      "url":  {
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "raw":  "{{baseUrl}}/register",
+                                                                  "path":  [
+                                                                               "register"
+                                                                           ]
+                                                              },
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  },
+                                      "name":  "Register",
+                                      "event":  [
+                                                    {
+                                                        "script":  {
+                                                                       "exec":  [
+                                                                                    "var j = pm.response.json(); if (j.token) { pm.collectionVariables.set(\"token\", j.token); }"
+                                                                                ],
+                                                                       "type":  "text/javascript"
+                                                                   },
+                                                        "listen":  "test"
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "body":  {
+                                                                   "raw":  "{\"password\":\"password123\",\"email\":\"jane@example.com\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               },
+                                                      "method":  "POST",
+                                                      "url":  {
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "raw":  "{{baseUrl}}/login",
+                                                                  "path":  [
+                                                                               "login"
+                                                                           ]
+                                                              },
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  },
+                                      "name":  "Login",
+                                      "event":  [
+                                                    {
+                                                        "script":  {
+                                                                       "exec":  [
+                                                                                    "var j = pm.response.json(); if (j.token) { pm.collectionVariables.set(\"token\", j.token); }"
+                                                                                ],
+                                                                       "type":  "text/javascript"
+                                                                   },
+                                                        "listen":  "test"
+                                                    }
+                                                ]
+                                  },
+                                  {
+                                      "name":  "Forgot password",
+                                      "request":  {
+                                                      "body":  {
+                                                                   "raw":  "{\"email\":\"jane@example.com\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               },
+                                                      "method":  "POST",
+                                                      "url":  {
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "raw":  "{{baseUrl}}/forgot-password",
+                                                                  "path":  [
+                                                                               "forgot-password"
+                                                                           ]
+                                                              },
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Reset password",
+                                      "request":  {
+                                                      "body":  {
+                                                                   "raw":  "{\"email\":\"jane@example.com\",\"password_confirmation\":\"newpassword123\",\"token\":\"token-from-laravel.log\",\"password\":\"newpassword123\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               },
+                                                      "method":  "POST",
+                                                      "url":  {
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "raw":  "{{baseUrl}}/reset-password",
+                                                                  "path":  [
+                                                                               "reset-password"
+                                                                           ]
+                                                              },
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ],
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Logout",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "url":  {
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "raw":  "{{baseUrl}}/logout",
+                                                                  "path":  [
+                                                                               "logout"
+                                                                           ]
+                                                              },
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Current user",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  {
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "raw":  "{{baseUrl}}/user",
+                                                                  "path":  [
+                                                                               "user"
+                                                                           ]
+                                                              },
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Users",
+                     "item":  [
+                                  {
+                                      "name":  "Get user with posts",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  {
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "raw":  "{{baseUrl}}/users/{{userId}}",
+                                                                  "path":  [
+                                                                               "users",
+                                                                               "{{userId}}"
+                                                                           ]
+                                                              },
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Follow user",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "url":  {
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "raw":  "{{baseUrl}}/users/{{userId}}/follow",
+                                                                  "path":  [
+                                                                               "users",
+                                                                               "{{userId}}",
+                                                                               "follow"
+                                                                           ]
+                                                              },
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Unfollow user",
+                                      "request":  {
+                                                      "method":  "DELETE",
+                                                      "url":  {
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "raw":  "{{baseUrl}}/users/{{userId}}/follow",
+                                                                  "path":  [
+                                                                               "users",
+                                                                               "{{userId}}",
+                                                                               "follow"
+                                                                           ]
+                                                              },
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Posts",
+                     "item":  [
+                                  {
+                                      "name":  "Global feed",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  {
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "raw":  "{{baseUrl}}/posts",
+                                                                  "path":  [
+                                                                               "posts"
+                                                                           ]
+                                                              },
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Following feed",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  {
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "raw":  "{{baseUrl}}/posts?following=1",
+                                                                  "path":  [
+                                                                               "posts"
+                                                                           ]
+                                                              },
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Create text post",
+                                      "request":  {
+                                                      "body":  {
+                                                                   "raw":  "{\"body\":\"Hello from Postman\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               },
+                                                      "method":  "POST",
+                                                      "url":  {
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "raw":  "{{baseUrl}}/posts",
+                                                                  "path":  [
+                                                                               "posts"
+                                                                           ]
+                                                              },
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Create photo post",
+                                      "request":  {
+                                                      "body":  {
+                                                                   "formdata":  [
+                                                                                    {
+                                                                                        "key":  "body",
+                                                                                        "type":  "text",
+                                                                                        "value":  "Photo post"
+                                                                                    },
+                                                                                    {
+                                                                                        "key":  "image",
+                                                                                        "type":  "file",
+                                                                                        "src":  ""
+                                                                                    }
+                                                                                ],
+                                                                   "mode":  "formdata"
+                                                               },
+                                                      "method":  "POST",
+                                                      "url":  {
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "raw":  "{{baseUrl}}/posts",
+                                                                  "path":  [
+                                                                               "posts"
+                                                                           ]
+                                                              },
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Get post with comments",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  {
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "raw":  "{{baseUrl}}/posts/{{postId}}",
+                                                                  "path":  [
+                                                                               "posts",
+                                                                               "{{postId}}"
+                                                                           ]
+                                                              },
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Update post",
+                                      "request":  {
+                                                      "body":  {
+                                                                   "raw":  "{\"body\":\"Edited post\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               },
+                                                      "method":  "PUT",
+                                                      "url":  {
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "raw":  "{{baseUrl}}/posts/{{postId}}",
+                                                                  "path":  [
+                                                                               "posts",
+                                                                               "{{postId}}"
+                                                                           ]
+                                                              },
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Delete post",
+                                      "request":  {
+                                                      "method":  "DELETE",
+                                                      "url":  {
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "raw":  "{{baseUrl}}/posts/{{postId}}",
+                                                                  "path":  [
+                                                                               "posts",
+                                                                               "{{postId}}"
+                                                                           ]
+                                                              },
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Like post",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "url":  {
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "raw":  "{{baseUrl}}/posts/{{postId}}/like",
+                                                                  "path":  [
+                                                                               "posts",
+                                                                               "{{postId}}",
+                                                                               "like"
+                                                                           ]
+                                                              },
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Unlike post",
+                                      "request":  {
+                                                      "method":  "DELETE",
+                                                      "url":  {
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "raw":  "{{baseUrl}}/posts/{{postId}}/like",
+                                                                  "path":  [
+                                                                               "posts",
+                                                                               "{{postId}}",
+                                                                               "like"
+                                                                           ]
+                                                              },
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Comments",
+                     "item":  [
+                                  {
+                                      "name":  "List comments",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  {
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "raw":  "{{baseUrl}}/posts/{{postId}}/comments",
+                                                                  "path":  [
+                                                                               "posts",
+                                                                               "{{postId}}",
+                                                                               "comments"
+                                                                           ]
+                                                              },
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Create comment",
+                                      "request":  {
+                                                      "body":  {
+                                                                   "raw":  "{\"body\":\"Great post!\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               },
+                                                      "method":  "POST",
+                                                      "url":  {
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "raw":  "{{baseUrl}}/posts/{{postId}}/comments",
+                                                                  "path":  [
+                                                                               "posts",
+                                                                               "{{postId}}",
+                                                                               "comments"
+                                                                           ]
+                                                              },
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Update comment",
+                                      "request":  {
+                                                      "body":  {
+                                                                   "raw":  "{\"body\":\"Edited comment\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               },
+                                                      "method":  "PUT",
+                                                      "url":  {
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "raw":  "{{baseUrl}}/comments/{{commentId}}",
+                                                                  "path":  [
+                                                                               "comments",
+                                                                               "{{commentId}}"
+                                                                           ]
+                                                              },
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Delete comment",
+                                      "request":  {
+                                                      "method":  "DELETE",
+                                                      "url":  {
+                                                                  "host":  [
+                                                                               "{{baseUrl}}"
+                                                                           ],
+                                                                  "raw":  "{{baseUrl}}/comments/{{commentId}}",
+                                                                  "path":  [
+                                                                               "comments",
+                                                                               "{{commentId}}"
+                                                                           ]
+                                                              },
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Accept",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  }
+                                  }
+                              ]
+                 }
+             ],
+    "auth":  {
+                 "bearer":  [
+                                {
+                                    "key":  "token",
+                                    "type":  "string",
+                                    "value":  "{{token}}"
+                                }
+                            ],
+                 "type":  "bearer"
+             }
+}

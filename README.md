@@ -1,58 +1,92 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Blog API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel 13 REST API for a small blog. Users can register, log in, reset their password, publish text or photo posts, comment on posts, like posts and follow other users. PostgreSQL is the database and Laravel Sanctum handles token authentication.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Register, login, logout and password reset (token based, Sanctum)
+- Posts: a text post (max 280 characters), a photo post (jpg/png, max 2MB), or both
+- Full CRUD on posts (owner only) and on comments (comment author only)
+- Deleting a post also deletes its comments and its image file
+- Get a user with their posts, and a post with its comments and the people who commented
+- Extras: likes, follows, a global feed and a "following" feed
+- Lists are paginated, 10 per page (use ?page=2)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Requirements
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP 8.3 or higher with the pdo_pgsql, mbstring, openssl, fileinfo and gd extensions
+- Composer
+- PostgreSQL 14 or higher
 
-## Learning Laravel
+## Setup
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1. Install dependencies:
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+        composer install
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+2. Create the environment file and app key:
 
-## Agentic Development
+        copy .env.example .env
+        php artisan key:generate
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+3. Create two PostgreSQL databases, one for the app and one for the tests (for example blog_api and blog_api_test), then set the DB_ values in .env:
 
-```bash
-composer require laravel/boost --dev
+        DB_CONNECTION=pgsql
+        DB_HOST=127.0.0.1
+        DB_PORT=5432
+        DB_DATABASE=blog_api
+        DB_USERNAME=postgres
+        DB_PASSWORD=your-password
 
-php artisan boost:install
-```
+4. Run the migrations, link the public storage folder and start the server:
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+        php artisan migrate
+        php artisan storage:link
+        php artisan serve
 
-## Contributing
+The API is now at http://127.0.0.1:8000/api. Send the header `Accept: application/json` with every request.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Authentication
 
-## Code of Conduct
+Register or log in to receive a token, then send it on protected requests as `Authorization: Bearer <token>`.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Password reset: `POST /api/forgot-password` creates a reset email. With `MAIL_MAILER=log` (the default here) the email is written to storage/logs/laravel.log and contains the token. Then call `POST /api/reset-password` with the token, email and new password.
 
-## Security Vulnerabilities
+## Endpoints
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+All routes are prefixed with /api. Everything except the first four requires a token.
 
-## License
+| Method | Path | What it does |
+| --- | --- | --- |
+| POST | /register | Create an account (name, email, password, password_confirmation) |
+| POST | /login | Log in (email, password) and receive a token |
+| POST | /forgot-password | Request a password reset (email) |
+| POST | /reset-password | Reset the password (token, email, password, password_confirmation) |
+| POST | /logout | Revoke the current token |
+| GET | /user | The logged in user |
+| GET | /users/{id} | A user with their posts (paginated) and follower counts |
+| POST | /users/{id}/follow | Follow a user |
+| DELETE | /users/{id}/follow | Unfollow a user |
+| GET | /posts | Global feed, newest first. Add ?following=1 for people you follow |
+| POST | /posts | Create a post (body and/or image, send as form-data for images) |
+| GET | /posts/{id} | A post with its comments and each commenter (comments paginated) |
+| PUT/PATCH | /posts/{id} | Update your post (body, image, remove_image) |
+| DELETE | /posts/{id} | Delete your post, its comments and its image |
+| POST | /posts/{id}/like | Like a post |
+| DELETE | /posts/{id}/like | Remove your like |
+| GET | /posts/{id}/comments | List a post's comments (paginated) |
+| POST | /posts/{id}/comments | Comment on a post (body) |
+| PUT/PATCH | /comments/{id} | Update your comment (body) |
+| DELETE | /comments/{id} | Delete your comment |
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Errors: 401 when not logged in, 403 when you do not own the post or comment, 404 when it does not exist, 422 for validation errors.
+
+## Tests
+
+The tests use their own database so your real data is never touched. Make sure the blog_api_test database exists, then run:
+
+    php artisan test
+
+## Postman
+
+Import postman/BlogAPI.postman_collection.json into Postman. Running Register or Login saves the token automatically. Change the postId, commentId and userId collection variables to try other records.
